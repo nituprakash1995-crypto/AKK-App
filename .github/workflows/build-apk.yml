@@ -1,1 +1,45 @@
+name: Build Android APK
 
+# Runs by itself every time you upload/commit files, and also when you press "Run workflow" in the Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install packages
+        run: npm install
+
+      - name: Create the Android project
+        run: npx cap add android
+
+      - name: Make app icon and splash from resources/
+        run: npx capacitor-assets generate --android
+
+      - name: Sync
+        run: npx cap sync android
+
+      - name: Build debug APK
+        run: |
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleDebug
+
+      - name: Save the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: akk-spices-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
