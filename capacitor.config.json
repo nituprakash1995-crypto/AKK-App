@@ -1,0 +1,15 @@
+{
+  "appId": "in.akkspices.app",
+  "appName": "AKK Spices",
+  "webDir": "www",
+  "backgroundColor": "#0F3324",
+  "server": {
+    "url": "https://akkspices.in/app/index.html",
+    "cleartext": false,
+    "allowNavigation": ["akkspices.in", "www.akkspices.in", "*.supabase.co"]
+  },
+  "android": {
+    "appendUserAgent": "AKKSpicesApp",
+    "allowMixedContent": false
+  }
+}
